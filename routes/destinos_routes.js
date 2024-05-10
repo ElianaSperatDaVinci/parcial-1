@@ -1,6 +1,7 @@
 import express from "express";
 import { obtenerDestinos, crearDestinos, buscarPorId, actuaizarDestino, eliminarDestino, estadoDePago, buscarPorUbicacion } from "../controllers/destinos_controllers.js";
 import Joi from "joi"
+import verificarToken from "../middlewares/auth.js"
 
 const ruta = express.Router();
 
@@ -13,7 +14,7 @@ const schema = Joi.object({
     hospedajeHasta: Joi.date().iso().min(Joi.ref('hospedajeDesde')).required()
 });
 
-ruta.get('/', (req, res) => {
+ruta.get('/', verificarToken, (req, res) => {
   let resultado = obtenerDestinos();
   resultado.then(destinos => {
     res.json({destinos})
